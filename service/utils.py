@@ -3,17 +3,18 @@ import hashlib
 import random, string
 import datetime, calendar, jwt
 
+
 def hash_password(user_password, salt_db):
     salt = ''.join([PWD_HASH_SALT, salt_db]).encode("utf-8")
     try:
-        hash_password = hashlib.pbkdf2_hmac(PWD_HASH_ALGO,
-                                            user_password.encode("utf-8"),
-                                            salt,
-                                            PWD_HASH_ITERATIONS
-                                            ).hex()
+        hashed_password = hashlib.pbkdf2_hmac(PWD_HASH_ALGO,
+                                              user_password.encode("utf-8"),
+                                              salt,
+                                              PWD_HASH_ITERATIONS
+                                              ).hex()
     except:
         return None
-    return hash_password
+    return hashed_password
 
 
 def generate_salt():
@@ -35,7 +36,7 @@ def create_token(data):
         "access_token": access_token,
         "refresh_token": refresh_token
     }
-    return token, 201
+    return token
 
 
 def compare_password(input_password, db_password, db_salt):

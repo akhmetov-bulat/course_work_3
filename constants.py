@@ -1,0 +1,8 @@
+# DB_FILENAME = ':memory:'
+DB_FILENAME = 'dao/test_db/test_db.db'
+PWD_HASH_SALT = "6npGTdau6XSCH8iuXUtLZHG5"
+PWD_HASH_ITERATIONS = 100_000
+PWD_HASH_ALGO = 'sha256'
+SECRET = b'e95AjGxVLKCq'
+algo = "HS256"
+PAGINATION = 3
