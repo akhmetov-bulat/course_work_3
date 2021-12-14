@@ -18,6 +18,7 @@ class Movie(db.Model):
     genre_id = db.Column(db.Integer, db.ForeignKey("genres.id"))
     genre = db.relationship("Genre")
 
+
 class MovieSchema(Schema):
     id = fields.Int(dump_only=True)
     title = fields.Str()

@@ -1,5 +1,7 @@
 from dao.auth import AuthDao
+from dao.favorites import FavoriteDao
 from service.auth import AuthService
+from service.favorites import FavoriteService
 from setup_db import db
 from dao.movie import MovieDao
 from service.movie import MovieService
@@ -27,3 +29,6 @@ user_service = UserService(user_dao)
 
 auth_dao = AuthDao(db.session)
 auth_service = AuthService(auth_dao)
+
+favorite_dao = FavoriteDao(db.session)
+favorite_service = FavoriteService(favorite_dao)

@@ -2,6 +2,8 @@ from flask import Flask
 from config import Config
 from setup_db import db
 from flask_restx import Api
+
+from views.favorites import favorites_movies_ns
 from views.movies import movie_ns
 from views.directors import director_ns
 from views.genres import genre_ns
@@ -30,6 +32,7 @@ def register_extensions(app):
     api.add_namespace(genre_ns)
     api.add_namespace(user_ns)
     api.add_namespace(auth_ns)
+    api.add_namespace(favorites_movies_ns)
     init_db(app, db)
 
 

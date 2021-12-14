@@ -15,6 +15,8 @@ class User(db.Model):
     role = db.Column(db.String, default="user", nullable=False)
     favorite_genre = db.Column(db.Integer, db.ForeignKey("genres.id"), default=1)
     genre = db.relationship("Genre")
+    movies = db.relationship("User", secondary="users_movies", lazy="subquery",
+                             backref="users")
 
 class UserSchema(Schema):
     id = fields.Int(dump_only=True)

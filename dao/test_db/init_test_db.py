@@ -47,6 +47,13 @@ def init_db(app, db):
             u2_raw_password = "123456"
             u2_password = hash_password(u2_raw_password, u2_salt)
             item2 = {"email": "qwer", "password": u2_password, "role": "user", "name": "name", "surname": "surname", "salt": u2_salt}
+            user_movie1 = {"user_id": 1, "movie_id": 1}
+            user_movie2 = {"user_id": 1, "movie_id": 2}
+            user_movie3 = {"user_id": 1, "movie_id": 3}
+
+            entities.append(UserMovie(**user_movie1))
+            entities.append(UserMovie(**user_movie2))
+            entities.append(UserMovie(**user_movie3))
             entities.append(User(**item2))
             db.session.add_all(entities)
 
