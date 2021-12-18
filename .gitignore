@@ -1,5 +1,11 @@
 /tests/sometest.py
 .idea
 /__pycache__
+/dao/__pycache__
+/dao/model/__pycache__
+/dao/test_db/__pycache__
+/service/__pycache__
+/views/__pycache__
 /venv
+
 package-lock.json
