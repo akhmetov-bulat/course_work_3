@@ -1,12 +1,8 @@
 
-from dao.model.movie import Movie, MovieSchema
-from flask_restx import Api, Resource, Namespace
+from dao.model.movie import MovieSchema
+from flask_restx import Resource, Namespace
 from implemented import movie_service
-from flask import request, jsonify, Response
-
 from flask_restx import reqparse
-
-# from views.helpers import auth_required, admin_required
 
 parser = reqparse.RequestParser()
 parser.add_argument("page", type=int, location='args')
@@ -14,7 +10,6 @@ parser.add_argument("status", type=str, location='args')
 
 movie_schema = MovieSchema()
 movies_schema = MovieSchema(many=True)
-
 movie_ns = Namespace('movies')
 
 
@@ -24,6 +19,9 @@ class MovieView(Resource):
     def get(self):
         page = parser.parse_args()["page"]
         status = parser.parse_args()["status"]
+        if status:
+            if status != "new":
+                status = None
         movies = movie_service.get_all(page=page, status=status)
         movies_json = movies_schema.dump(movies)
         if movies:

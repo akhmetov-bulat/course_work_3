@@ -1,6 +1,5 @@
 from dao.model.movie import Movie, MovieSchema
 from dao.model.user import User
-from dao.model.user_movie import UserMovie
 
 
 
@@ -9,24 +8,29 @@ class FavoriteDao:
         self.session = session
 
     def get_all(self, user_id):
-        movies = self.session.query(Movie).join(UserMovie, User).filter(User.id == user_id).all()
-        return movies
+        user = self.session.query(User).filter(User.id == user_id).one()
+        return user.movies
 
     def add_one(self, mid, user_id):
-        user_movie = UserMovie(user_id=user_id, movie_id=mid)
+        user = self.session.query(User).filter(User.id == user_id).one()
+        movie = self.session.query(Movie).filter(Movie.id == mid).one()
+        nested = self.session.begin_nested()
         try:
-            self.session.add(user_movie)
+            user.movies.append(movie)
             self.session.commit()
             return True
         except:
+            nested.rollback()
             return False
 
     def del_one(self, mid, user_id):
-        user_movie = UserMovie(user_id=user_id, movie_id=mid)
+        user = self.session.query(User).filter(User.id == user_id).one()
+        movie = self.session.query(Movie).filter(Movie.id == mid).one()
+        nested = self.session.begin_nested()
         try:
-            user_movie = self.session.query(UserMovie).filter(UserMovie.user_id == user_id, UserMovie.movie_id == mid).first()
-            self.session.delete(user_movie)
+            user.movies.remove(movie)
             self.session.commit()
             return True
         except:
+            nested.rollback()
             return False

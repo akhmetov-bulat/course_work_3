@@ -1,4 +1,4 @@
-from dao.model.user import User, UserSchema
+from dao.model.user import User, UserSchema, UserPatch, UserPassword
 from flask_restx import Resource, Namespace, abort
 from implemented import user_service
 from flask import request
@@ -23,22 +23,13 @@ class UserView(Resource):
 
     @self_only
     def patch(self, user_id):
-        req_json = request.json
-        name = req_json.get("name")
-        surname = req_json.get("surname")
-        favorite_genre = req_json.get("favourite_genre")
-        user_json = {"id": user_id, }
-        if name:
-            user_json["name"] = name
-        if surname:
-            user_json["surname"] = surname
-        if favorite_genre:
-            user_json["favorite_genre"] = favorite_genre
-        print(user_json)
-        if len(user_json.keys()) == 1:
-            abort(400)
-        if user_service.update(user_json=user_json):
-            return "updated", 200
+        user_json = request.json
+        if "favourite_genre" in user_json.keys():
+            user_json["favorite_genre"] = user_json.pop("favourite_genre")
+        if UserPatch().load(user_json):
+            user_json["id"] = user_id
+            if user_service.update(user_json=user_json):
+                return "updated", 200
         return 400
 
 
@@ -47,13 +38,9 @@ class UserView(Resource):
 
     @self_only
     def put(self, user_id):
-        req_json = request.json
-        print(req_json)
-        password_json = {"id": user_id,
-                         "password_1": req_json.get("password_1"),
-                         "password_2": req_json.get("password_2")}
-        if None in password_json.values():
-            abort(400)
-        if user_service.update_password(password_json):
+        user_json = request.json
+        if UserPassword().load(user_json):
+            user_json["id"] = user_id
+        if user_service.update_password(user_json):
             return "updated", 200
         return 400

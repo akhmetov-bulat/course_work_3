@@ -41,5 +41,6 @@ app = create_app(cfg)
 
 register_extensions(app)
 
+
 if __name__ == '__main__':
     app.run()

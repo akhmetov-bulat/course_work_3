@@ -3,6 +3,8 @@ import hashlib
 import random, string
 import datetime, calendar, jwt
 
+from setup_db import db
+
 
 def hash_password(user_password, salt_db):
     salt = ''.join([PWD_HASH_SALT, salt_db]).encode("utf-8")
@@ -43,4 +45,3 @@ def compare_password(input_password, db_password, db_salt):
     if hash_password(input_password, db_salt) == db_password:
         return True
     return False
-

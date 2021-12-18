@@ -7,6 +7,4 @@ class MovieService:
         return self.movie_dao.get_one(mid)
 
     def get_all(self,page, status):
-        if status == "new":
-            status = "year"
         return self.movie_dao.get_all(page, status)

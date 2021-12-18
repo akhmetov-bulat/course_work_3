@@ -9,30 +9,28 @@ class AuthService:
     def __init__(self, auth_dao):
         self.auth_dao = auth_dao
 
-    def create(self, email, new_password, name, surname):
+    def create(self, user_json):
         new_salt = generate_salt()
-        password = hash_password(new_password, new_salt)
-        user_json = {"salt":new_salt,
-                     "email":email,
-                     "password":password,
-                     "name":name,
-                     "surname":surname}
-        if not self.auth_dao.check_email(email):
-            new_user = self.auth_dao.create(user_json)
+        hashed_password = hash_password(user_json["password"], new_salt)
+        user_json["salt"] = new_salt
+        user_json["password"] = hashed_password
+        new_user = self.auth_dao.create(user_json)
+        if new_user:
             return user_schema.dump(new_user)
         return None
 
-    def auth_get_token(self, email, password):
-        user = self.auth_dao.get_by_email(email)
+    def auth_get_token(self, req_json):
+        user = self.auth_dao.get_by_email(req_json["email"])
         if user is None:
             return None
-        if compare_password(password, user.password, user.salt):
+        if compare_password(req_json["password"], user.password, user.salt):
             data = {"id":user.id,
                     "email": user.email,
                     "role": user.role
                     }
             tokens = create_token(data)
             return tokens
+        return None
 
     def auth_refresh_token(self, refresh_token):
         try:

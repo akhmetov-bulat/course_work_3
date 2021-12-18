@@ -17,11 +17,11 @@ class MovieDao:
     def get_all(self, page, status):
         if status:
             if page:
-                movies = self.session.query(Movie).order_by(Movie.year.desc()).limit(PAGINATION).offset(PAGINATION*page-1).all()
+                movies = self.session.query(Movie).order_by(Movie.year.desc()).limit(PAGINATION).offset(PAGINATION*(int(page)-1)).all()
             else:
                 movies = self.session.query(Movie).order_by(Movie.year.desc()).all()
         elif page:
-            movies = self.session.query(Movie).limit(PAGINATION).offset(PAGINATION * page - 1).all()
+            movies = self.session.query(Movie).limit(PAGINATION).offset(PAGINATION * (int(page) - 1)).all()
         else:
             movies = self.session.query(Movie).all()
         return movies

@@ -1,5 +1,5 @@
 from flask_restx import Namespace, Resource, abort
-from dao.model.user import UserSchema
+from dao.model.user import UserSchema, AuthDataCheck
 from implemented import auth_service
 from flask import request
 
@@ -12,31 +12,20 @@ user_schema = UserSchema()
 @auth_ns.route('/register')
 class RegisterView(Resource):
     def post(self):
-        req_json = request.json
-        email = req_json.get('email', None)
-        password = req_json.get('password', None)
-        name = req_json.get('name', "unnamed")
-        surname = req_json.get('surname', "unnamed")
-        print(email, password)
-        if None in [email, password]:
-            abort(400)
-        user_json = auth_service.create(email=email, new_password=password, name=name, surname=surname)
-        if user_json:
-            return user_json, 201, {'Location': f"/{user_ns}/{user_json['id']}"}
-        abort(401)
+        if UserSchema().load(request.json):
+            user_json = auth_service.create(request.json)
+            if user_json:
+                return user_json, 201, {'Location': f"/{user_ns}/{user_json['id']}"}
+        abort(400)
 
 @auth_ns.route('/login')
 class AuthView(Resource):
     def post(self):
-        req_json = request.json
-        email = req_json.get('email', None)
-        password = req_json.get('password', None)
-        if None in [email, password]:
-            abort(400)
-        data = auth_service.auth_get_token(email, password)
-        if not data:
-            abort(401, error="Неверные учётные данные")
-        return data, 201
+        if AuthDataCheck().load(request.json):
+            data = auth_service.auth_get_token(request.json)
+            if not data:
+                abort(401, error="Неверные учётные данные")
+            return data, 201
 
     def put(self):
         req_json = request.json

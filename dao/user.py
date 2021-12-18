@@ -37,4 +37,3 @@ class UserDao:
             return True
         except:
             return False
-
