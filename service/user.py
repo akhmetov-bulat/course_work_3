@@ -1,7 +1,9 @@
 from dao.model.user import UserSchema
-from service.utils import generate_salt, hash_password, compare_password
+from service.utils import hash_password, compare_password
+
 
 user_schema = UserSchema()
+
 
 class UserService:
     def __init__(self, user_dao):

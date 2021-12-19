@@ -1,12 +1,12 @@
-from constants import PWD_HASH_SALT
-from dao.model.genre import GenreSchema, Genre
+from dao.model.genre import GenreSchema
 from setup_db import db
 from marshmallow import Schema, fields
 
 favorite = db.Table("favorites",
                     db.Column("user_id", db.Integer, db.ForeignKey('users.id'), primary_key=True),
-                    db.Column("movie_id",db.Integer, db.ForeignKey('movies.id'), primary_key=True)
+                    db.Column("movie_id", db.Integer, db.ForeignKey('movies.id'), primary_key=True)
                     )
+
 
 class User(db.Model):
     __tablename__ = "users"
@@ -21,6 +21,7 @@ class User(db.Model):
     genre = db.relationship("Genre")
     movies = db.relationship("Movie", secondary="favorites", lazy="subquery",
                              backref=db.backref("movies", lazy=True))
+
 
 class UserSchema(Schema):
     id = fields.Int(dump_only=True)
@@ -43,6 +44,7 @@ class UserPatch(Schema):
     name = fields.Str()
     surname = fields.Str()
     favorite_genre = fields.Int()
+
 
 class UserPassword(Schema):
     password_1 = fields.Str(required=True)

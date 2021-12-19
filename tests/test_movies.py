@@ -3,8 +3,8 @@ from setup_db import db
 from dao.model.movie import Movie
 from dao.movie import MovieDao
 from contextlib import contextmanager
-
 from service.movie import MovieService
+
 
 @pytest.fixture
 def movie_dao():
@@ -16,26 +16,22 @@ def movie_dao():
 def does_not_raise():
     yield
 
-@contextmanager
-def not_raise():
-    yield
 
+args_get_all = [[8, "new", None, None, 0, pytest.raises(IndexError)],
+                [None, "", 1, 2018, 20, does_not_raise()],
+                [1, "", 1, 2018, 3, does_not_raise()],
+                [None, "new", 12, 2021, 20, does_not_raise()],
+                ["1", "new", 12, 2021, 3, does_not_raise()],
+                [7, "new", 15, 1980, 2, does_not_raise()],
+                [8, "new", None, None, 0, pytest.raises(IndexError)]]
 
-args_get_all = [[8,"new", None, None, 0, pytest.raises(IndexError)],
-        [None,None, 1, 2018, 20, does_not_raise()],
-        [1,None, 1, 2018, 3, does_not_raise()],
-        [None,"new", 12, 2021, 20, does_not_raise()],
-        ["1","new", 12, 2021, 3, does_not_raise()],
-        [7,"new", 15, 1980, 2, does_not_raise()],
-        [8,"new", None, None, 0, pytest.raises(IndexError)]]
-
-args_get_all_view = [[8,"new", None, None, 0, pytest.raises(IndexError)],
-        [None,None, 1, 2018, 20, does_not_raise()],
-        [1,None, 1, 2018, 3, does_not_raise()],
-        [None,"new", 12, 2021, 20, does_not_raise()],
-        ["1","new", 12, 2021, 3, does_not_raise()],
-        [7,"new", 15, 1980, 2, does_not_raise()],
-        [8,"new", None, None, 0, pytest.raises(IndexError)]]
+args_get_all_view = [[8, "new", None, None, 0, pytest.raises(IndexError)],
+                     [None, "", 1, 2018, 20, does_not_raise()],
+                     [1, "", 1, 2018, 3, does_not_raise()],
+                     [None, "new", 12, 2021, 20, does_not_raise()],
+                     ["1", "new", 12, 2021, 3, does_not_raise()],
+                     [7, "new", 15, 1980, 2, does_not_raise()],
+                     [8, "new", None, None, 0, pytest.raises(IndexError)]]
 
 
 args_get_one = [[1, 200, does_not_raise()],
@@ -44,7 +40,7 @@ args_get_one = [[1, 200, does_not_raise()],
                 [111, 404, pytest.raises(AttributeError)]]
 
 
-class TestMovieDao():
+class TestMovieDao:
     @pytest.fixture(autouse=True)
     def movie_dao(self, client, movie_dao):
         self.movie_dao = movie_dao
@@ -65,7 +61,7 @@ class TestMovieDao():
             assert len(movies) == exp_len
 
 
-class TestMovieService():
+class TestMovieService:
     @pytest.fixture(autouse=True)
     def movie_service(self, client, movie_dao):
         self.movie_service = MovieService(movie_dao=movie_dao)
@@ -79,7 +75,7 @@ class TestMovieService():
         movies = self.movie_service.get_all(page=None, status=None)
         for item in movies:
             assert isinstance(item, Movie)
-        assert len(movies)>0
+        assert len(movies) > 0
 
 
 class TestMovieView:
@@ -93,9 +89,9 @@ class TestMovieView:
         assert response.status_code == 200
 
     @pytest.mark.parametrize('page, status, exp_id, exp_year, exp_len, expectation', args_get_all_view)
-    def test_get_all_params(self,page, status, exp_id, exp_year, exp_len, expectation):
+    def test_get_all_params(self, page, status, exp_id, exp_year, exp_len, expectation):
         with expectation:
-            status_ = ("status=" + status) if status else ""
+            status_ = ("status=" + str(status)) if status else ""
             page_ = ("page=" + str(page)) if page else""
             if_both = "&" if page and status else ""
             response = self.client.get(f"/movies/?{status_}{if_both}{page_}")

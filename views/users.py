@@ -1,4 +1,4 @@
-from dao.model.user import User, UserSchema, UserPatch, UserPassword
+from dao.model.user import UserSchema, UserPatch, UserPassword
 from flask_restx import Resource, Namespace, abort
 from implemented import user_service
 from flask import request
@@ -19,18 +19,21 @@ class UserView(Resource):
         user_json = user_service.get_one(user_id)
         if user_json:
             return user_json, 200
-        return "not found", 404
+        abort(404)
 
     @self_only
     def patch(self, user_id):
         user_json = request.json
         if "favourite_genre" in user_json.keys():
             user_json["favorite_genre"] = user_json.pop("favourite_genre")
-        if UserPatch().load(user_json):
-            user_json["id"] = user_id
-            if user_service.update(user_json=user_json):
-                return "updated", 200
-        return 400
+        try:
+            if UserPatch().load(user_json):
+                user_json["id"] = user_id
+                if user_service.update(user_json=user_json):
+                    return "updated", 200
+                abort(400)
+        except:
+            abort(400)
 
 
 @user_ns.route('/password')
@@ -39,8 +42,11 @@ class UserView(Resource):
     @self_only
     def put(self, user_id):
         user_json = request.json
-        if UserPassword().load(user_json):
-            user_json["id"] = user_id
-        if user_service.update_password(user_json):
-            return "updated", 200
-        return 400
+        try:
+            if UserPassword().load(user_json):
+                user_json["id"] = user_id
+                if user_service.update_password(user_json):
+                    return "updated", 200
+            abort(400)
+        except:
+            abort(400)

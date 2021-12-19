@@ -1,13 +1,10 @@
-from dao.model.director import Director, DirectorSchema
+from dao.model.director import DirectorSchema
 from flask_restx import Resource, Namespace
 from implemented import director_service
-from flask import request, jsonify, Response
 
-# from views.helpers import auth_required, admin_required
 
 director_schema = DirectorSchema()
 directors_schema = DirectorSchema(many=True)
-
 director_ns = Namespace('directors')
 
 

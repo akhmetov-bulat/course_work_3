@@ -4,7 +4,6 @@ from constants import DB_FILENAME
 class Config():
     SQLALCHEMY_DATABASE_URI = f'sqlite:///{DB_FILENAME}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # SQLALCHEMY_ECHO = True
     SQLALCHEMY_ECHO = False
     DEBUG = True
     HOST = "localhost"

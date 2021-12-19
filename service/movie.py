@@ -6,5 +6,5 @@ class MovieService:
     def get_one(self, mid):
         return self.movie_dao.get_one(mid)
 
-    def get_all(self,page, status):
+    def get_all(self, page, status):
         return self.movie_dao.get_all(page, status)

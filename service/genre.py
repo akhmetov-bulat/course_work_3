@@ -1,4 +1,3 @@
-from dao.model.genre import Genre
 
 
 class GenreService:

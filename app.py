@@ -13,7 +13,6 @@ from dao.test_db.init_test_db import init_db
 from flask_cors import CORS
 
 
-
 def create_app(cfg):
     app = Flask(__name__)
     cors = CORS()

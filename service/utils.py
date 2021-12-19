@@ -1,9 +1,11 @@
-from constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS, PWD_HASH_ALGO, SECRET, algo
+import calendar
+import datetime
 import hashlib
-import random, string
-import datetime, calendar, jwt
+import jwt
+import random
+import string
 
-from setup_db import db
+from constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS, PWD_HASH_ALGO, SECRET, algo
 
 
 def hash_password(user_password, salt_db):
@@ -21,11 +23,12 @@ def hash_password(user_password, salt_db):
 
 def generate_salt():
     chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
-    size = random.randint(8,16)
+    size = random.randint(8, 16)
     salt_db = ''.join(random.choice(chars) for x in range(size))
     if salt_db:
         return salt_db
     return None
+
 
 def create_token(data):
     min30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)

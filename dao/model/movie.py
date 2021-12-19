@@ -1,7 +1,6 @@
 from marshmallow import fields, Schema
-
-from dao.model.director import Director, DirectorSchema
-from dao.model.genre import Genre, GenreSchema
+from dao.model.director import DirectorSchema
+from dao.model.genre import GenreSchema
 from setup_db import db
 
 

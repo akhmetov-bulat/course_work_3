@@ -1,9 +1,10 @@
 from service.utils import hash_password, create_token, compare_password, generate_salt
-from dao.model.user import User, UserSchema
+from dao.model.user import UserSchema
 import jwt
 from constants import SECRET, algo
 
 user_schema = UserSchema()
+
 
 class AuthService:
     def __init__(self, auth_dao):
@@ -24,7 +25,7 @@ class AuthService:
         if user is None:
             return None
         if compare_password(req_json["password"], user.password, user.salt):
-            data = {"id":user.id,
+            data = {"id": user.id,
                     "email": user.email,
                     "role": user.role
                     }
@@ -41,7 +42,7 @@ class AuthService:
         user = self.auth_dao.get_by_email(email)
         if user is None:
             return None
-        data = {"id":user.id,
+        data = {"id": user.id,
                 "email": user.email,
                 "role": user.role
                 }

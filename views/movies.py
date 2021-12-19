@@ -36,4 +36,3 @@ class MovieViewMid(Resource):
         if movie:
             return movie_schema.dump(movie), 200
         return "not found", 404
-

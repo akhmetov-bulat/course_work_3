@@ -23,16 +23,8 @@ class UserDao:
         return None
 
     def update(self, user_json):
-        # try:
-        self.session.query(User).filter(User.id == user_json.get("id")).update(user_json)
-        self.session.commit()
-        return True
-        # except:
-        #     return False
-
-    def update_password(self, user):
         try:
-            self.session.update(user)
+            self.session.query(User).filter(User.id == user_json.get("id")).update(user_json)
             self.session.commit()
             return True
         except:

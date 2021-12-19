@@ -7,16 +7,6 @@ from dao.model.user import User
 from service.utils import generate_salt, hash_password
 
 
-def check_database():
-    from constants import DB_FILENAME
-    if DB_FILENAME == ":memory:":
-        return False
-    from os.path import isfile
-    if not isfile(DB_FILENAME):
-        return False
-    return True
-
-
 def init_db(app, db):
     with app.app_context():
         db.drop_all()
@@ -59,5 +49,3 @@ def init_db(app, db):
             user_1.movies.append(movie2)
             user_1.movies.append(movie3)
             db.session.commit()
-
-

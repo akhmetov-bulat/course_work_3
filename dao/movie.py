@@ -1,5 +1,4 @@
 from constants import PAGINATION
-from dao.model.genre import Genre
 from dao.model.movie import Movie, MovieSchema
 
 movie_schema = MovieSchema()
